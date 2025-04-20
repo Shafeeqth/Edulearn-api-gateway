@@ -1,0 +1,18 @@
+global:
+  scrape_interval: "15m" # Global scrape interval, how often to scrape targets (15 minutes)
+
+scrape_configs:
+  - job_name: "api-gateway" # Name of the scrape job for the API Gateway
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: api-gateway
+  - job_name: "user-service" # Name of the scrape job for the User Service
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: user-service
