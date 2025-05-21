@@ -1,4 +1,3 @@
-import { AuthType, UserRoles } from "../../../../shared/types/user-types";
 import { z } from "zod";
 
 export const LogoutUserSchema = z

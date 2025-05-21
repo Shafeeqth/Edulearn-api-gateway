@@ -1,4 +1,3 @@
-import { AuthType } from "../../../../shared/types/user-types";
 import { z } from "zod";
 
 export const LoginUserSchema = z.object({
