@@ -1,6 +1,45 @@
 import { GrpcClient } from "../../../utils/grpc/client";
 import { GrpcClientOptions } from "../../../utils/grpc/types";
-import { BlockUserRequest, BlockUserResponse, ChangePasswordRequest, ChangePasswordResponse, CheckUserByEmailRequest, CheckUserByEmailResponse, ForgotPasswordRequest, ForgotPasswordResponse, GetAllInstructorsResponse, GetAllUserEmailsRequest, GetAllUserEmailsResponse, GetNewRefreshTokenRequest, GetNewRefreshTokenResponse, GetUserByIdRequest, GetUserByIdResponse, LoginUserRequest, LoginUserResponse, RegisterUserRequest, RegisterUserResponse, UpdateUserDetailsRequest, UpdateUserDetailsResponse, UserServiceClient, VerifyUserRequest, VerifyUserResponse } from "./proto/generated/user";
+import {
+  Auth2SignRequest,
+  Auth2SignResponse,
+  BlockUserRequest,
+  BlockUserResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  CheckUserByEmailRequest,
+  CheckUserByEmailResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  GetAllInstructorsResponse,
+  GetAllUserEmailsRequest,
+  GetAllUserEmailsResponse,
+  GetAllUsersRequest,
+  GetAllUsersResponse,
+  GetCurrentUserRequest,
+  GetCurrentUserResponse,
+  GetDetailedUserRequest,
+  GetDetailedUserResponse,
+  GetNewRefreshTokenRequest,
+  GetNewRefreshTokenResponse,
+  GetUserByIdRequest,
+  GetUserByIdResponse,
+  LoginUserRequest,
+  LoginUserResponse,
+  LogoutUserRequest,
+  LogoutUserResponse,
+  RegisterInstructorRequest,
+  RegisterInstructorResponse,
+  RegisterUserRequest,
+  RegisterUserResponse,
+  UnBlockUserRequest,
+  UnBlockUserResponse,
+  UpdateUserDetailsRequest,
+  UpdateUserDetailsResponse,
+  UserServiceClient,
+  VerifyUserRequest,
+  VerifyUserResponse,
+} from "./proto/generated/user";
 
 export class UserService {
   private readonly client: GrpcClient<Partial<UserServiceClient>>;
@@ -27,6 +66,33 @@ export class UserService {
     return response as RegisterUserResponse;
   }
 
+  async auth2Sign(
+    request: Auth2SignRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<Auth2SignResponse> {
+    const response = await this.client.unaryCall("auth2Sign", request, options);
+    return response as Auth2SignResponse;
+  }
+  async registerInstructor(
+    request: RegisterInstructorRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<RegisterInstructorResponse> {
+    const response = await this.client.unaryCall("registerInstructor", request, options);
+    return response as RegisterInstructorResponse;
+  }
+
+  async logoutUser(
+    request: LogoutUserRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<LogoutUserResponse> {
+    const response = await this.client.unaryCall(
+      "logoutUser",
+      request,
+      options
+    );
+    return response as LogoutUserResponse;
+  }
+
   async verifyUser(
     request: VerifyUserRequest,
     options: GrpcClientOptions = {}
@@ -38,7 +104,7 @@ export class UserService {
     );
     return response as VerifyUserResponse;
   }
-  
+
   async checkUserEmailExists(
     request: CheckUserByEmailRequest,
     options: GrpcClientOptions = {}
@@ -50,7 +116,6 @@ export class UserService {
     );
     return response as CheckUserByEmailResponse;
   }
-
 
   async getAllUserEmails(
     request: GetAllUserEmailsRequest,
@@ -64,7 +129,6 @@ export class UserService {
     return response as GetAllUserEmailsResponse;
   }
 
-
   async getNewRefreshToken(
     request: GetNewRefreshTokenRequest,
     options: GrpcClientOptions = {}
@@ -76,19 +140,15 @@ export class UserService {
     );
     return response as GetNewRefreshTokenResponse;
   }
-  
+
   async loginUser(
     request: LoginUserRequest,
     options: GrpcClientOptions = {}
   ): Promise<LoginUserResponse> {
-    const response = await this.client.unaryCall(
-      "loginUser",
-      request,
-      options
-    );
+    const response = await this.client.unaryCall("loginUser", request, options);
     return response as LoginUserResponse;
   }
-  
+
   async forgotPassword(
     request: ForgotPasswordRequest,
     options: GrpcClientOptions = {}
@@ -100,7 +160,18 @@ export class UserService {
     );
     return response as ForgotPasswordResponse;
   }
-  
+  async getDetailedUser(
+    request: GetDetailedUserRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<GetDetailedUserResponse> {
+    const response = await this.client.unaryCall(
+      "getDetailedUser",
+      request,
+      options
+    );
+    return response as GetDetailedUserResponse;
+  }
+
   async updateUserDetails(
     request: UpdateUserDetailsRequest,
     options: GrpcClientOptions = {}
@@ -112,7 +183,7 @@ export class UserService {
     );
     return response as UpdateUserDetailsResponse;
   }
-  
+
   async changePassword(
     request: ChangePasswordRequest,
     options: GrpcClientOptions = {}
@@ -124,20 +195,51 @@ export class UserService {
     );
     return response as ChangePasswordResponse;
   }
-  
+
   async blockUser(
     request: BlockUserRequest,
     options: GrpcClientOptions = {}
   ): Promise<BlockUserResponse> {
+    const response = await this.client.unaryCall("blockUser", request, options);
+    return response as BlockUserResponse;
+  }
+  async unBlockUser(
+    request: UnBlockUserRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<UnBlockUserResponse> {
     const response = await this.client.unaryCall(
-      "blockUser",
+      "unBlockUser",
       request,
       options
     );
-    return response as BlockUserResponse;
+    return response as UnBlockUserResponse;
   }
-  
+
   async getCurrentUser(
+    request: GetCurrentUserRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<GetCurrentUserResponse> {
+    const response = await this.client.unaryCall(
+      "getCurrentUser",
+      request,
+      options
+    );
+    return response as GetCurrentUserResponse;
+  }
+
+  async getAllUsers(
+    request: GetAllUsersRequest,
+    options: GrpcClientOptions = {}
+  ): Promise<GetAllUsersResponse> {
+    const response = await this.client.unaryCall(
+      "getAllUsers",
+      request,
+      options
+    );
+    return response as GetAllUsersResponse;
+  }
+
+  async getUser(
     request: GetUserByIdRequest,
     options: GrpcClientOptions = {}
   ): Promise<GetUserByIdResponse> {
@@ -148,8 +250,6 @@ export class UserService {
     );
     return response as GetUserByIdResponse;
   }
-  
-
 
   close() {
     this.client.close();

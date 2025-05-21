@@ -13,12 +13,11 @@ message UserInfo {
   string userId = 1;
   string username = 2;
   string email = 3;
-  string firstName = 4;
-  string lastName = 5;
+  string avatar  = 4;
+  string status = 5;
   string role = 6;
-  bool isBlocked = 7;
+  google.protobuf.Timestamp updatedAt = 7;
   google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
 }
 
 // Common Pagination Request
@@ -57,13 +56,22 @@ service UserService {
   // User Registration
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
 
+  // Auth2 Sign
+  rpc Auth2Sign(Auth2SignRequest) returns (Auth2SignResponse);
+
   rpc VerifyUser(VerifyUserRequest) returns (VerifyUserResponse);
 
   // User Login
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
 
+  // Logout User
+  rpc LogoutUser(LogoutUserRequest) returns (LogoutUserResponse);
+
   // Get New Refresh Token
   rpc GetNewRefreshToken(GetNewRefreshTokenRequest) returns (GetNewRefreshTokenResponse);
+
+  // Get New Refresh Token
+  rpc RegisterInstructor(GetNewRefreshTokenRequest) returns (GetNewRefreshTokenResponse);
 
   // Forgot Password
   rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
@@ -90,10 +98,15 @@ service UserService {
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
 
 //   // Get Details About the currently logged in User
-//   rpc GetCurrentUser(GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc GetCurrentUser(GetCurrentUserRequest) returns (GetCurrentUserResponse);
 
   // Block/Unblock a User
   rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
+
+  // Block/Unblock a User
+  rpc UnBlockUser(UnBlockUserRequest) returns (UnBlockUserResponse);
+
+  rpc GetDetailedUser(GetDetailedUserRequest) returns (GetDetailedUserResponse);
 
   // Get All Instructors (with pagination)
   rpc GetAllInstructors(GetAllInstructorsRequest) returns (GetAllInstructorsResponse);
@@ -112,6 +125,29 @@ message RegisterUserRequest {
  
 }
 
+message Auth2SignRequest {
+  string username = 1;
+  string email = 2;
+  string role = 4;
+  string avatar = 5;
+  string authType = 6; // e.g., "password", "google", "facebook"
+
+}
+
+message Auth2SignResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+  UserInfo user = 3;
+}
+
+message LogoutUserRequest {
+  string userId = 1;
+}
+
+message LogoutUserResponse {
+  string userId = 1;
+  string message = 2;
+}
 // Verify User
 message VerifyUserRequest {
   string email = 1;
@@ -128,7 +164,7 @@ message RegisterUserResponse {
 message LoginUserRequest {
   string email = 1;
   string password = 2;
-   string authType = 6; // e.g., "password", "google", "facebook"
+ 
 }
 
 message LoginUserResponse {
@@ -149,6 +185,11 @@ message LoginSuccess {
   string refreshToken = 2;
   UserInfo user = 3;
 }
+message RegisterInstructorResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+  UserInfo user = 3;
+}
 
 message VerifySuccess {
   string accessToken = 1;
@@ -160,6 +201,11 @@ message VerifySuccess {
 message GetNewRefreshTokenRequest {
   string refreshToken = 1;
 }
+
+message RegisterInstructorRequest {
+  string userId = 1;
+}
+
 
 message GetNewRefreshTokenResponse {
   oneof result {
@@ -189,12 +235,47 @@ message ForgotPasswordSuccess {
   bool acknowledged = 1;
 }
 
+message GetDetailedUserRequest {
+  string userId = 1;
+}
+
+message GetDetailedUserResponse {
+  string userId = 1;
+  optional string firstName = 2;
+  optional string lastName = 3;
+  optional string phone = 4;
+  optional string headline = 5;
+  optional string biography = 6;
+  optional string avatar = 7;
+  optional string website = 8;
+  optional string language = 9;
+  optional string facebook = 10;
+  optional string instagram = 11;
+  optional string linkedin = 12;
+  string status = 13;
+  string role = 14;
+  string email = 15;
+  google.protobuf.Timestamp updatedAt = 16;
+  google.protobuf.Timestamp createdAt = 17;
+
+}
+
 // Update User Details
 message UpdateUserDetailsRequest {
   string userId = 1;
-  string firstName = 2;
-  string lastName = 3;
-  // Add other fields that can be updated
+  optional string firstName = 2;
+  optional string lastName = 3;
+  optional string phone = 4;
+  optional string headline = 5;
+  optional string biography = 6;
+  optional string avatar = 7;
+  optional string website = 8;
+  optional string language = 9;
+  optional string facebook = 10;
+  optional string instagram = 11;
+  optional string linkedin = 12;
+
+  
 }
 
 message UpdateUserDetailsResponse {
@@ -246,7 +327,6 @@ message GetAllUsersRequest {
 }
 
 message GetAllUserEmailsRequest {
-  PaginationRequest pagination = 1;
 }
 
 message GetAllUsersResponse {
@@ -276,6 +356,9 @@ message AllUsersSuccess {
 message GetUserByIdRequest {
   string userId = 1;
 }
+message GetCurrentUserRequest {
+  string userId = 1;
+}
 
 message CheckUserByEmailRequest {
   string email = 1;
@@ -293,6 +376,12 @@ message CheckUserByEmailResponse {
     Error error = 2;
   }
 }
+message GetCurrentUserResponse {
+  oneof result {
+    UserInfo user = 1;
+    Error error = 2;
+  }
+}
 message GetUserByIdResponse {
   oneof result {
     UserInfo user = 1;
@@ -304,6 +393,9 @@ message GetUserByIdResponse {
 message BlockUserRequest {
   string userId = 1;
 }
+message UnBlockUserRequest {
+  string userId = 1;
+}
 
 message BlockUserResponse {
   oneof result {
@@ -311,8 +403,18 @@ message BlockUserResponse {
     Error error = 2;
   }
 }
+message UnBlockUserResponse {
+  oneof result {
+    UnBlockUserSuccess success = 1;
+    Error error = 2;
+  }
+}
 
 message BlockUserSuccess {
+  bool updated = 1;
+}
+
+message UnBlockUserSuccess {
   bool updated = 1;
 }
 
