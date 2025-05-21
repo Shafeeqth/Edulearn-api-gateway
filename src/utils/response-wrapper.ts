@@ -6,6 +6,9 @@ export class ResponseWrapper {
   private readonly res: ExpressResponse;
 
   public constructor(res: ExpressResponse) {
+    if (!new.target) {
+      new ResponseWrapper(res);
+    }
     this.res = res;
   }
 
@@ -70,10 +73,11 @@ export class ResponseWrapper {
 
   sendListWithMapping<Entity, Response>(
     entity: Entity[],
-    mappingConfig: MappingConfig<Entity, Response>
+    mappingConfig: MappingConfig<Entity, Response>,
+    message?: string
   ): void {
     const mapper = new ResponseMapper<Entity, Response>(mappingConfig);
-    this.success(mapper.toResponseList(entity));
+    this.success(mapper.toResponseList(entity), message);
   }
 
   /**

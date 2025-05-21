@@ -7,10 +7,13 @@ import { ZodError } from "zod";
 
 export class ValidationError extends BaseError {
   errorCode: ErrorCodes.VALIDATION_ERROR = ErrorCodes.VALIDATION_ERROR;
-  statusCode: ErrorStatusCodes.VALIDATION_ERROR = ErrorStatusCodes.VALIDATION_ERROR;
+  statusCode: ErrorStatusCodes.VALIDATION_ERROR =
+    ErrorStatusCodes.VALIDATION_ERROR;
 
   constructor(private errors: ZodError) {
-    super("Invalid request parameters ");
+    super(
+      `Invalid request parameters at '${errors.errors[0]?.path}' received '${errors.errors[0]}'`
+    );
 
     Object.setPrototypeOf(this, this.constructor.prototype);
   }

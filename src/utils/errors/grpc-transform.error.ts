@@ -5,13 +5,15 @@ export class GrpcTransformedError extends BaseError {
   public statusCode: number;
   public requestId?: string;
   public errorCode: string;
-  details: { message: string; field?: string }[];
-  timestamp: string;
-  documentation?: string;
+  public details: { message: string; field?: string }[];
+  public timestamp: string;
+  public documentation?: string;
+  public sStack: string;
 
   constructor(error: ServiceError, requestId?: string) {
     super(error.details);
     this.name = error.name;
+    this.sStack = this.parseStackTrance(error);
     this.stack = error.stack;
     this.statusCode = this.mapGrpcStatusToHttpStatus(error.code);
     this.errorCode = this.parseErrorCode(error);
@@ -23,6 +25,18 @@ export class GrpcTransformedError extends BaseError {
 
   serializeErrors(): { message: string; field?: string }[] {
     return this.details;
+  }
+
+  logError(): void {
+    console.error({
+      errorCode: this.errorCode,
+      statusCode: this.statusCode,
+      message: this.message,
+      serializeError: this.serializeErrors(),
+      sStack: this.sStack, // Server error stack
+      stack: this.stack,
+      resolution: this.getResolutionSteps(),
+    });
   }
 
   toJSON() {
@@ -46,6 +60,7 @@ export class GrpcTransformedError extends BaseError {
     }
     return new Date().toISOString();
   }
+
   private parseErrorCode(error: ServiceError) {
     const errorCode = error.metadata?.get("error_code")?.[0];
     if (errorCode) {
@@ -56,6 +71,18 @@ export class GrpcTransformedError extends BaseError {
       }
     }
     return "UNKNOWN_ERROR";
+  }
+
+  private parseStackTrance(error: ServiceError) {
+    const errorStack = error.metadata?.get("error_stack")?.[0];
+    if (errorStack) {
+      try {
+        return JSON.parse(errorStack.toString());
+      } catch {
+        return errorStack.toString();
+      }
+    }
+    return [];
   }
 
   private parseDetails(
