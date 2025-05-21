@@ -9,19 +9,25 @@ const router = Router();
 const userController = new AdminController();
 
 router.get(
-  "/",
+  "/users",
   authenticate,
   asyncHandler(userController.getAllUsers.bind(userController))
 );
 
 router.delete(
-  "/:id",
+  "/users/:userId",
   authenticate,
   asyncHandler(userController.blockUser.bind(userController))
 );
 
+router.patch(
+  "/users/:userId",
+  authenticate,
+  asyncHandler(userController.unBlockUser.bind(userController))
+);
+
 router.get(
-  "/:id",
+  "/users/:userId",
   authenticate,
   asyncHandler(userController.blockUser.bind(userController))
 );
