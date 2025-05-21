@@ -1,5 +1,5 @@
-import  dotenv from "dotenv"
-dotenv.config({encoding: "utf-8", debug: true, path: ".env"})
+import dotenv from "dotenv";
+dotenv.config({ encoding: "utf-8", debug: true, path: ".env" });
 
 export const config = {
   port: (process.env.PORT as string) || 3000,
@@ -17,5 +17,26 @@ export const config = {
     sessionService: process.env.SESSION_SERVICE_GRPC || "localhost:50053",
     notificationService:
       process.env.NOTIFICATION_SERVICE_GRPC || "localhost:50054",
+  },
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_CLOUD_KEY,
+    apiSecret: process.env.CLOUDINARY_CLOUD_SECRET,
+  },
+  s3: {
+    region: process.env.AWS_S3_REGION!,
+    accessKey: process.env.AWS_S3_API_KEY!,
+    accessSecret: process.env.AWS_S3_API_SECRET!,
+    bucketName: process.env.AWS_S3_BUCKET_NAME!,
+  },
+  kafka: {
+    clientId: process.env.KAFKA_CLIENT_ID || "edulearn-api-gateway",
+    brokers: (process.env.KAFKA_BROKERS || "localhost:9092").split(","),
+    ssl: process.env.KAFKA_SSL === "true",
+    sals: {
+      mechanism: "plain",
+      username: process.env.KAFKA_SASL_USERNAME,
+      password: process.env.KAFKA_SASL_PASSWORD,
+    },
   },
 };
