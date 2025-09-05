@@ -1,24 +1,46 @@
 {
-    "compilerOptions": {
-      "target": "ES2020",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": true, // Enable all strict type-checking options
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "emitDecoratorMetadata": true, // Required for decorators like in Class-validator, TypeORM
-      "experimentalDecorators": true, // Enable decorator support
-      "baseUrl": "./src", // Base directory for module resolution
-      // "paths": {
-      //   // For cleaner imports, e.g., import { User } from '@/entities/User';
-      //   "@/*": ["./*"]
-      // },
-      "typeRoots": ["/node_modules/@types", "./src/shared/types"], // Ensure custom types are included
-      "lib": ["es2020"],
-      "strictPropertyInitialization": false,
-    }
-  }
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@/config/*": ["./config/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/middlewares/*": ["./middlewares/*"],
+      "@/services/*": ["./services/*"],
+      "@/routes/*": ["./routes/*"]
+    },
+    "typeRoots": ["node_modules/@types", "./src/shared/types"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    // "exactOptionalPropertyTypes": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}
   

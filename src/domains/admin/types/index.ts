@@ -1,4 +1,4 @@
-import { UserInfo } from "../../../domains/clients/user/proto/generated/user";
+import { UserInfo } from "../../service-clients/user/proto/generated/user";
 
 export interface IUser {
   id: string;

@@ -1,4 +1,4 @@
-import { UserInfo } from "../../../domains/clients/user/proto/generated/user";
+import { UserInfo } from "../../service-clients/user/proto/generated/user";
 
 export interface IUser {
   id: string;
@@ -39,14 +39,14 @@ export enum UserStatus {
 }
 
 export enum UserRoles {
-  ADMIN = "admin",
-  INSTRUCTOR = "instructor",
-  USER = "user",
+  ADMIN = "ADMIN",
+  INSTRUCTOR = "INSTRUCTOR",
+  STUDENT = "STUDENT",
 }
 
 export enum AuthType {
-  EMAIL = "email",
-  OAUTH_2 = "oauth-2",
+  EMAIL = "EMAIL",
+  OAUTH_2 = "OAUTH_2",
 }
 
 export interface IUserWithAuthToken extends IAuthTokens {

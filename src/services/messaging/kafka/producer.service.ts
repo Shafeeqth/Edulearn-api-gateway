@@ -1,7 +1,7 @@
-import { LoggingService } from "@mdshafeeq-repo/edulearn-common";
 import { IMessageProducer } from "../interfaces/producer.interface";
 import { createProducer } from "./kafka.config";
 import { EventMetadata, EventPayload } from "../types/event.type";
+import { LoggingService } from "../../../services/observability/logging/logging.service";
 
 const logger = new LoggingService("api-gateway");
 
@@ -11,9 +11,9 @@ export class KafkaProducerService implements IMessageProducer {
   async connect(): Promise<void> {
     try {
       await this.producer.connect();
-      logger.logInfo("Kafka producer connected successfully");
+      logger.info("Kafka producer connected successfully");
     } catch (error) {
-      logger.logError("Failed to connect to Kafka producer :)", {
+      logger.error("Failed to connect to Kafka producer :)", {
         error,
       });
       throw error;
@@ -23,9 +23,9 @@ export class KafkaProducerService implements IMessageProducer {
   async disconnect(): Promise<void> {
     try {
       await this.producer.disconnect();
-      logger.logInfo("Kafka producer disconnected successfully");
+      logger.info("Kafka producer disconnected successfully");
     } catch (error) {
-      logger.logError("Failed to disconnect Kafka producer :)", { error });
+      logger.error("Failed to disconnect Kafka producer :)", { error });
     }
   }
 
@@ -56,12 +56,12 @@ export class KafkaProducerService implements IMessageProducer {
         ],
       });
 
-      logger.logInfo(`Published event to ${topic}`, {
+      logger.info(`Published event to ${topic}`, {
         eventType: payload.eventType,
         correlationId: metadata.correlationId,
       });
     } catch (error) {
-      logger.logError(`Failed to publish event to ${topic}:`, { error });
+      logger.error(`Failed to publish event to ${topic}:`, { error });
       throw error;
     }
   }

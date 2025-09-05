@@ -1,10 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import redisClient from "../utils/redis";
-import { AuthenticationError } from "../utils/errors/unauthenticate.error";
-import { UserBlockService } from "../services/user-blocklist.service";
-import { UserProhibitedError } from "../utils/errors/user-prohibited.error";
+import { Request, Response, NextFunction } from 'express';
+import { AuthenticationError } from '@/shared/utils/errors/unauthenticate.error';
+import { UserBlockService } from '@/services/user-blocklist.service';
+import { UserProhibitedError } from '@/shared/utils/errors/user-prohibited.error';
 
-const blocklistService = new UserBlockService(redisClient.getClient());
+const blocklistService = UserBlockService.getInstance();
 
 export async function blocklistMiddleware(
   req: Request,

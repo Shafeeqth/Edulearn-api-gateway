@@ -1,6 +1,6 @@
 import multer from "multer";
-import { StorageMemory } from "../shared/constants/storage";
-import { fileFilter } from "../utils/fileFilter.utils";
+import { StorageMemory } from "@/shared/constants/storage";
+import { fileFilter } from "@/shared/utils/fileFilter.utils";
 
 const storage = multer.memoryStorage();
 

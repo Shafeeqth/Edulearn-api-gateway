@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { RateLimiter } from "../utils/rate-limiter";
+import { RateLimiter } from "@/shared/utils/rate-limiter";
 
 export interface RateLimiterMiddlewareOptions {
   points?: number; // max requests
@@ -18,7 +18,7 @@ export function rateLimiter(options: RateLimiterMiddlewareOptions = {}) {
 
   return async (req: Request, res: Response, next: NextFunction) => {
     const key = req.user?.userId || getKey(req);
-    console.log("rate-limiter-key -> " + key);
+    console.info("rate-limiter-key -> " + key);
     try {
       await limiter.consume(key!);
       // Optionally, set rate limit headers

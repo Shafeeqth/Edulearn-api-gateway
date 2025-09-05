@@ -1,18 +1,20 @@
-import { RedisClientType } from "redis";
+import { RedisService } from '@/shared/utils/redis';
+import { RedisClientType } from 'redis';
 
 export class UserBlockService {
   private readonly redisClient: RedisClientType;
-  private readonly keyPrefix = "blocked_user:";
+  private readonly keyPrefix = 'blocked_user:';
   private static instance: UserBlockService;
 
-  constructor(redisClient?: RedisClientType) {
-    if (!UserBlockService.instance) {
-      if (!redisClient) throw Error("Must provide redisClient first time");
+  private constructor() {
+    this.redisClient = RedisService.getInstance().getClient();
+  }
 
-      this.redisClient = redisClient;
-      UserBlockService.instance = this;
+  static getInstance(): UserBlockService {
+    if (!UserBlockService.instance) {
+      UserBlockService.instance = new UserBlockService();
     }
-    UserBlockService.instance;
+    return UserBlockService.instance;
   }
 
   /**
@@ -24,7 +26,7 @@ export class UserBlockService {
     userId: string,
     ttlSeconds = 60 * 60 * 24 * 30
   ): Promise<void> {
-    await this.redisClient.set(this.keyPrefix + userId, "1", {
+    await this.redisClient.set(this.keyPrefix + userId, '1', {
       EX: ttlSeconds,
     });
   }
@@ -41,11 +43,11 @@ export class UserBlockService {
    */
   async isUserBlocked(userId: string): Promise<boolean> {
     const result = await this.redisClient.get(this.keyPrefix + userId);
-    return result === "1";
+    return result === '1';
   }
 
   async getAllBlockedUsers(): Promise<string[]> {
-    const keys = await this.redisClient.keys(this.keyPrefix + "*");
-    return keys.map((k) => k.replace(this.keyPrefix, ""));
+    const keys = await this.redisClient.keys(this.keyPrefix + '*');
+    return keys.map(k => k.replace(this.keyPrefix, ''));
   }
 }

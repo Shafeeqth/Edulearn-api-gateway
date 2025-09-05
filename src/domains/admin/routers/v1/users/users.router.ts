@@ -1,8 +1,8 @@
-import { asyncHandler } from "../../../../../utils/async-handler";
-import { cacheMiddleware } from "../../../../../middlewares/cache.middleware";
+import { asyncHandler } from "@/shared/utils/async-handler";
+import { cacheMiddleware } from "@/middlewares/cache.middleware";
 import { AdminController } from "../../../controllers/v1/user.controller";
 import { Router } from "express";
-import { authenticate } from "../../../../../middlewares/auth.middleware";
+import { authenticate } from "@/middlewares/auth.middleware";
 
 const router = Router();
 

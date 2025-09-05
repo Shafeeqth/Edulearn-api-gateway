@@ -1,5 +1,5 @@
 import { blocklistMiddleware } from "../../middlewares/blocklist.middleware";
-import { userRouter } from "../../domains/user/routers/v1/users/users.router";
+import { userRouter } from "../../domains/user/routers/v1/users.router";
 import {Router} from "express";
 
 const router = Router();
